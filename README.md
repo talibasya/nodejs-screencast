@@ -65,4 +65,58 @@ NPM commands:
 - npm **i**nstall - install module by name;
 - npm **up**date - update all modules in you node_modules directory;
 - npm **r**emove - remove module from node_modules directody;
+- mpm prune - remove packages which not added to `package.json`
+
+## 8 (npm pakage structure)
+field `version` //MAJOR.MINOR.PATCH http://semver.org
+
+### devDependencies 
+istalled with flag (npm config) or run `npm i` in downloaded package.
+
+### main 
+path to app.
+
+## 9 (global modules)
+`sudo npm -g i express`
+
+## 10 (util, inherits)
+
+```javascript
+var obj = {
+	a: 5,
+	b: 6,
+	inspect: function() {
+		return 123,
+	}
+}
+
+console.log(obj) // will 123
+```
+
+## 11 (module console)
+```javascript
+// no console.debug
+console.log("Log")  // = info (out) -> standard flow
+console.error("Error") // = warn (err) -> error flow
+console.trace();
+```
+
+## 12 (Inherit Error)
+Add to code own HttpError (for 404 type error) and PhraseError (for 500). Inherit using `util`
+
+`Error.captureStackTrace(this, HttpError)` - put stack into Error object.
+
+error handler:
+```javascript
+try {
+	var page = makePage('index')
+	console.log(page)
+} catch (e) {
+	if (e instanceof HttpError) {
+		console.log(e.status, e.message);
+	} else {
+		console.error("Error %s\n message: %s\n stack: %s", e.name, e.message, e.stack);
+	}
+}
+```
 
