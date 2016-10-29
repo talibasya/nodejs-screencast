@@ -54,3 +54,15 @@ module.exports = function(module) {
 	}
 };
 ```
+
+## 7 (npm introduction)
+NPM commands:
+- npm **i**nit - initialization;
+- npm **pu**blish - add to remote npm repo;
+- npm unpublish - remove to remote npm repo;
+- npm **addu**ser - log in in npm as user;
+- npm **s**earch - search in npm base module by name;
+- npm **i**nstall - install module by name;
+- npm **up**date - update all modules in you node_modules directory;
+- npm **r**emove - remove module from node_modules directody;
+
