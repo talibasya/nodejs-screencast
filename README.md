@@ -4,7 +4,7 @@ Source from nodejs tutorial (youtube screencast::kantor)
 ## 1-4
 (introduction, installing, adding sources etc) 
 
-## 5 modules
+## 5 (modules)
 ### global objects:
 ```
 global.User = function() {
@@ -17,7 +17,7 @@ global.User = function() {
 2. file.json
 3. file/index.js
 
-## 6 working with modules
+## 6 (working with modules)
 structure variable module
 
 ```
@@ -42,7 +42,7 @@ NODE_PATH=. node server.js
 ```
 ## factory
 
-```
+```javasctipt
 // index.js
 var log = require('logger')(module);
 
