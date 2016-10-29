@@ -42,7 +42,7 @@ NODE_PATH=. node server.js
 ```
 ## factory
 
-```javasctipt
+```javascript
 // index.js
 var log = require('logger')(module);
 
