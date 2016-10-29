@@ -6,7 +6,7 @@ Source from nodejs tutorial (youtube screencast::kantor)
 
 ## 5 (modules)
 ### global objects:
-```
+```javascript
 global.User = function() {
 	...
 }
@@ -20,7 +20,7 @@ global.User = function() {
 ## 6 (working with modules)
 structure variable module
 
-```
+```javascript
 if (module.parent) {
 	console.log('was included to another file')
 } else {
