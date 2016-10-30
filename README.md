@@ -136,5 +136,83 @@ server.emit('error');
 ### Memory leak 
 if they write your handlers into EE, then will leak.
 
-## 14 (nodeJS server	)
+## 14 (nodeJS server )
+```javascript
+var http = require('http');
 
+var server = new http.Server();
+
+server.listen(1337, '127.0.0.1');
+
+server.on('request', function(req, res) {
+	res.end('Hello world');
+});
+
+////////
+var emit = server.emit;
+server.emit = function(event) {
+	console.log(event);
+	emit.apply(server, arguments);
+}
+```
+## 15 (echo server)
+
+```javascript
+var http = require('http');
+var url = require('url');
+
+var server = new http.Server(function(req, res) {
+	console.log(req.method, req.url);
+
+	var urlParsed = url.parse(req.url, true);
+
+	if (urlParsed.pathname = '/echo' && urlParsed.query.message) {
+		res.end(urlParsed.query.message);
+	} else {
+		res.status.Code = 404;
+		res.end('Page not found');
+	}
+});
+
+server.listen(1337, '127.0.0.1');
+```
+
+## 16 (http mpdule documentation)
+`http.request` - make http request to resource in the web.
+
+## 17 (development supervisor)
+development with livereload for node js
+instead `node server.js` using `supervisor server.js`.
+
+## 18 (debugging)
+
+###Default debugger:
+
+1. add command `debugger` to your code;
+2. run `node debug server.js`;
+3. run `help` in console (`repl`, `cont` ...).
+
+### node-inspector
+
+1. install global package `node-inspector`;
+2. run `node --debug server.js` (node --debug-brk server.js); 
+3. new console and run `node-inpsector`;
+4. add command 'debugger' to your code;
+
+## 19 (login, debug and winston modules)
+
+```javascript
+var debug = require('debug')('server:request');
+//...
+ debug('Echo: ' + message);
+
+```
+
+run server using `DEBUG=server node server.js`
+run server using `DEBUG=server:* node server.js`
+
+show code logs:
+`NODE_DEBUG="http net" node server.js`
+
+## 20 (async development)
+example based `fs.readFile` and `fs.readFileSync`
