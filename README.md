@@ -120,3 +120,21 @@ try {
 }
 ```
 
+## 13 (EE)
+```javascript
+var server = new EventEmitter;
+server.on('request', function(req) {
+	// request handler	
+});
+//...
+server.emit('request', {from : 'Client'})
+
+// by default next example will kill process
+server.emit('error');
+```
+
+### Memory leak 
+if they write your handlers into EE, then will leak.
+
+## 14 (nodeJS server	)
+
