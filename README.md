@@ -216,3 +216,242 @@ show code logs:
 
 ## 20 (async development)
 example based `fs.readFile` and `fs.readFileSync`
+
+## 21 (event cycle, library libUV)
+how event loop works in the Node.js.
+
+## 22 ( timers. difference between browser and server, **ref/unref** )
+
+server will close connection after 2500 secs.
+
+```javascript
+var http = require('http');
+var server = new http.Server(function(req, res){ ... }).listen(3000);
+
+setTimeout(function(){
+	server.close();	
+}, 2500);
+```
+
+If will added a next code:
+```javascript
+setInterval(function() {
+	console.log(process.memoryUsage());
+}, 1000)
+```
+The node js working doesn't finish.
+
+The resolve is:
+```javascript
+setTimeout(function(){
+	server.close(function() { process.exit() }); // or clear interval 	
+}, 2500);
+```
+### ref/unref
+
+Tell node js `setInterval` timer is not important.
+```javascript
+var timer = setInterval(function() {
+	console.log(process.memoryUsage());
+}, 1000)
+
+timer.unref();
+```
+
+**ref** - u can use after command `timer.unref()`. Set timer as an important worker again.
+You can use these methods for `Socket`, `http.Server`, `Timer` etc.
+
+**process.nextTick** - put callback into event loop as next event.
+
+```javascript
+var fs = require('fs');
+
+fs.open(__filename, 'r', function(err, file) {
+	console.log('IO!');
+});
+
+setImmediate(function(){
+	console.log('immediate');
+});
+
+process.nextTick(function() {
+	console.log('nextTick')
+});
+```
+output:
+```
+nextTick
+IO!
+immediate
+```
+
+## 23 (read/write, binary, module fs)
+
+```javascript
+var fs = require('fs');
+
+//fs.readFile(__filename, {encoding: 'utf-8'}, function(err, data) {
+fs.readFile(__filename, function(err, data) {
+	if (err) return console.error(err);
+	console.log(data); // take a Buffer object [a5 58 19 ...]
+	// console.log(data.toString()) // show text (current javascript source code)
+});
+```
+
+## 24 (safe path to file)
+
+Send remote file via access authorization
+```javascript
+var http = require('http');
+var fs = require('fs');
+var url = require('url');
+var path = require('path');
+
+var ROOT = __dirname + '/public';
+
+http.createServer(function(req, res) {
+	if (!checkAccess(req)) {
+		res.statusCode = 403;
+		res.end('Tell me the secret to access!');
+		return;
+	}
+
+	sendFileSafe(url.parse(req.url).pathname, res);
+
+}).listen(3000);
+
+function checkAccess(req) {
+	return url.parse(req.url, true).query.secret == 'o_O';
+}
+
+function sendFileSafe(filePath, res) {
+
+	function sendResult(code, text) {
+		res.statusCode = code;
+		res.end(text);
+	}
+	
+	try { // decode cyrillic symbols
+		filePath = decodeURIComponent(filePath);
+	} catch(e) {
+		return sendResult(400, 'Bad request');
+	}
+
+	if (~filePath.indexOf('\0')) { // find hidden symbol
+		return sendResult(400, 'Bad request');
+	}
+
+	filePath = path.normalize(path.join(ROOT, filePath)); // from dir public
+
+	if (filePath.indexOf(ROOT) != 0) { // check out safe mode (remove . .. //// etc)
+		return sendResult(404, 'File not found');
+	}
+
+	fs.stat(filePath, function(err, stats) { // check exist file and type
+		if (err || !stats.isFile()) {
+			return sendResult(404, 'File not found');
+		}
+
+		sendFile(filePath, res); // send file
+	})
+}
+
+function sendFile(filePath, res) {
+	
+	fs.readFile(filePath, function(err, content) { // bad approach - can kill server, file too big etc
+		if (err) throw err;
+
+		var mime = require('mime').lookup(filePath);
+		res.setHeader('Content-Type'. mime + "; charset=utf-8");
+		res.end(content);
+	})
+}
+```
+
+## 25 (threads, fs.ReadStream)
+
+Read a big file using streams. This is the best way and safe for reading/writing files. 
+```javascript
+var fs = require('fs');
+
+// fs.ReadStream incherids from stream.Readable
+var stream = new fs.ReadStream(__filename);
+//var stream = new fs.ReadStream(__filename, {encoding: 'utf-8'});
+
+stream.on('readable', function() {
+	var data = stream.read();
+	console.log(data);
+})
+
+stream.on('end', function() {
+	console.log('THE END')
+});
+
+stream.on('error', function(err) {
+	console.error(err);	
+})
+```
+
+## 26 (writable thread. method pipe)
+The code below explain how to handle readable/writable streams and using pipe method
+```javascript
+var http = require('http');
+var fs = require('fs');
+
+new http.Server(function(req, res) {
+	if (req.url == '/big.html'){
+		var file = new fs.ReadStream('big.html');
+		sendFile(file, res);
+	}
+}).listen(3000);
+
+function sendFile(file, res) {
+	file.on('readable', write);
+
+	function write() {
+		var fileContent = file.read();
+
+		if (fileContent && !res.write(fileContent)) {
+			file.removeListener('readable', write);
+
+			res.once('drain', function() {
+				file.on('readable', write);
+				write();
+			})
+		}
+	}
+
+	file.on('end', function() {
+		res.end();
+	})
+}
+
+// new version
+function sendFile(file, res) {
+	file.pipe(res);
+	file.pipe(process.stdout);
+
+	file.on('error', function(err) {
+		res.statusCode = 500;
+		res.end('Server Error');
+		console.error(err);
+	});
+
+	file
+		.on('open', function() {
+			console.log('open');
+		})
+		.on('close', function() {
+			console.log('close');
+		});
+
+	res.on('close', function() { // connection was break (for normal 'close' emits event 'finish')
+		file.destroy();
+	})
+}
+```
+
+curl tutorial :)
+```
+curl --limit-rate 1k http://localhost:3000/big.html
+```
