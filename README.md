@@ -455,3 +455,11 @@ curl tutorial :)
 ```
 curl --limit-rate 1k http://localhost:3000/big.html
 ```
+
+## 27 (chat based on long-polling, reading POST)
+
+Implemented char example in `chat` folder. 
+```
+git clone
+node ./chat/server.js
+``` 
