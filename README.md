@@ -471,3 +471,20 @@ git clone
 node ./domain/app.js
 ```
 A main file - `app.js`. Includes `handler` for example and emit error which goes throught domain. The another version `handler2` commented is once more kind of errors.
+
+## 29 (read paramateres from command line)
+
+```javascript
+// node server.js --port=3000
+// node server.js -port 3000
+var http = require('http');
+var opts = require('optimist').argv;
+
+// console.log(process.argv);
+// console.log(process.env.HOME); // home directory
+// console.log(process.env.NODE_ENV); // type envoirment
+
+http.createServer(function(req, res) {
+	res.end('the server is running');
+}).listen(opts.port);
+```
