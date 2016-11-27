@@ -458,8 +458,16 @@ curl --limit-rate 1k http://localhost:3000/big.html
 
 ## 27 (chat based on long-polling, reading POST)
 
-Implemented char example in `chat` folder. 
+Implemented chat example in `chat` folder. 
 ```
 git clone
 node ./chat/server.js
 ``` 
+## 28 (domain, async try..catch)
+
+It is in `domain` folder and shows how to use domain. This is a specific module from **Node.js** and catches async errors from callback functions. The file `domain.js` is an example how to use. To run server please perform below commands:
+```
+git clone
+node ./domain/app.js
+```
+A main file - `app.js`. Includes `handler` for example and emit error which goes throught domain. The another version `handler2` commented is once more kind of errors.
