@@ -538,4 +538,17 @@ Continue development in `/express-chat` folder.
   cd vendor/
   bower i jquery bootstrap
   ```
- 
+## 33 install mongoDB
+
+Tutorial explains how to install mongoDB on Windows and example how to use.
+
+## 34 basing MongoDB, native driver
+
+`mongo chat` - working with database from console
+
+u need to install `mongo native drive`
+
+All commands like `remove`, `update` from collections put a updated quantity to callback.
+
+Method `find` return cursor, which you can use as flow. See more documentation.
+
