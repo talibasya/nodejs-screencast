@@ -488,3 +488,28 @@ http.createServer(function(req, res) {
 	res.end('the server is running');
 }).listen(opts.port);
 ```
+
+## 30 Express: the basics, middleware
+
+In this exercise was implemented chat based on **express** framework and add into `express-chat` folder
+
+1. Install `express` as global package
+ ```
+ npm install -g express
+ ```
+ * for ubuntu also you need to install an `express-generator` package
+ ```
+ npm install -g express-generator
+ ``` 
+2. Create project making express
+ ```
+ express -e -s // -s parameter doesn't work on ubuntu
+ npm i // install dependencies
+ ```
+
+Using middleware u can add your handler for each requrest to server. Also you have control for including next `use` or send response on current step.
+
+Middleware with four parameters `express` get as an error handler.
+
+Default response `not found GET /url` will rewrite your own middleware on the botttom of chain.
+ 
