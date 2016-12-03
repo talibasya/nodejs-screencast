@@ -523,3 +523,19 @@ Add own customize logger based on `winstom`. (in `/libs/` directory )
 logger `express.logger` with `immediate` write to console text before request performing.
 
 Create example with `.ejs` engine on express server.
+
+## 32 templates: layout, block, partials
+
+Continue development in `/express-chat` folder.
+ 
+ - Add 'ejs-locals' for helping
+ - Create layout in 'views' directory
+ - Install frontend components using `bower` 
+  ```
+  npm install -g bower
+  cd public/
+  mkdir vendor
+  cd vendor/
+  bower i jquery bootstrap
+  ```
+ 
