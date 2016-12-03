@@ -7,12 +7,17 @@
 var app = require('../app');
 var debug = require('debug')('express-chat:server');
 var http = require('http');
+var config = require('../config');
+
+var logger = require('../libs/log')(module);
+
+logger.info('there is a module'); // didn't work !!!
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || config.get('port'));
 app.set('port', port);
 
 /**

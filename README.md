@@ -512,4 +512,14 @@ Using middleware u can add your handler for each requrest to server. Also you ha
 Middleware with four parameters `express` get as an error handler.
 
 Default response `not found GET /url` will rewrite your own middleware on the botttom of chain.
- 
+
+## 31 logger, nconf, templates
+
+Continue development in `/express-chat` folder.
+Adding nconf package to project and change static properties as variables using this library.
+
+Add own customize logger based on `winstom`. (in `/libs/` directory )
+
+logger `express.logger` with `immediate` write to console text before request performing.
+
+Create example with `.ejs` engine on express server.
