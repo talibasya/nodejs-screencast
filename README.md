@@ -552,3 +552,6 @@ All commands like `remove`, `update` from collections put a updated quantity to 
 
 Method `find` return cursor, which you can use as flow. See more documentation.
 
+## 35 Mongoose basics
+
+Create a database for chat (user schema) and make an example in `createDb.js`.
