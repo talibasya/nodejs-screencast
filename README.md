@@ -2,7 +2,7 @@
 Source from nodejs tutorial (youtube screencast::kantor)
 
 ## 1-4
-(introduction, installing, adding sources etc) 
+(introduction, installing, adding sources etc)
 
 ## 5 (modules)
 ### global objects:
@@ -27,7 +27,7 @@ if (module.parent) {
 	console.log('this file was run')
 }
 
-``` 
+```
 
 A file included once and getting from cache for next `require` method.
 
@@ -70,10 +70,10 @@ NPM commands:
 ## 8 (npm pakage structure)
 field `version` //MAJOR.MINOR.PATCH http://semver.org
 
-### devDependencies 
+### devDependencies
 istalled with flag (npm config) or run `npm i` in downloaded package.
 
-### main 
+### main
 path to app.
 
 ## 9 (global modules)
@@ -124,7 +124,7 @@ try {
 ```javascript
 var server = new EventEmitter;
 server.on('request', function(req) {
-	// request handler	
+	// request handler
 });
 //...
 server.emit('request', {from : 'Client'})
@@ -133,7 +133,7 @@ server.emit('request', {from : 'Client'})
 server.emit('error');
 ```
 
-### Memory leak 
+### Memory leak
 if they write your handlers into EE, then will leak.
 
 ## 14 (nodeJS server )
@@ -166,7 +166,7 @@ var server = new http.Server(function(req, res) {
 
 	var urlParsed = url.parse(req.url, true);
 
-	if (urlParsed.pathname = '/echo' && urlParsed.query.message) {
+	if (urlParsed.pathname == '/echo' && urlParsed.query.message) {
 		res.end(urlParsed.query.message);
 	} else {
 		res.status.Code = 404;
@@ -177,7 +177,7 @@ var server = new http.Server(function(req, res) {
 server.listen(1337, '127.0.0.1');
 ```
 
-## 16 (http mpdule documentation)
+## 16 (http module documentation)
 `http.request` - make http request to resource in the web.
 
 ## 17 (development supervisor)
@@ -186,16 +186,16 @@ instead `node server.js` using `supervisor server.js`.
 
 ## 18 (debugging)
 
-###Default debugger:
+### Default debugger:
 
 1. add command `debugger` to your code;
 2. run `node debug server.js`;
 3. run `help` in console (`repl`, `cont` ...).
 
-### node-inspector
+### Node-inspector:
 
 1. install global package `node-inspector`;
-2. run `node --debug server.js` (node --debug-brk server.js); 
+2. run `node --debug server.js` (node --debug-brk server.js);
 3. new console and run `node-inpsector`;
 4. add command 'debugger' to your code;
 
@@ -229,7 +229,7 @@ var http = require('http');
 var server = new http.Server(function(req, res){ ... }).listen(3000);
 
 setTimeout(function(){
-	server.close();	
+	server.close();
 }, 2500);
 ```
 
@@ -330,7 +330,7 @@ function sendFileSafe(filePath, res) {
 		res.statusCode = code;
 		res.end(text);
 	}
-	
+
 	try { // decode cyrillic symbols
 		filePath = decodeURIComponent(filePath);
 	} catch(e) {
@@ -357,7 +357,7 @@ function sendFileSafe(filePath, res) {
 }
 
 function sendFile(filePath, res) {
-	
+
 	fs.readFile(filePath, function(err, content) { // bad approach - can kill server, file too big etc
 		if (err) throw err;
 
@@ -370,7 +370,7 @@ function sendFile(filePath, res) {
 
 ## 25 (threads, fs.ReadStream)
 
-Read a big file using streams. This is the best way and safe for reading/writing files. 
+Read a big file using streams. This is the best way and safe for reading/writing files.
 ```javascript
 var fs = require('fs');
 
@@ -388,7 +388,7 @@ stream.on('end', function() {
 });
 
 stream.on('error', function(err) {
-	console.error(err);	
+	console.error(err);
 })
 ```
 
@@ -458,11 +458,11 @@ curl --limit-rate 1k http://localhost:3000/big.html
 
 ## 27 (chat based on long-polling, reading POST)
 
-Implemented chat example in `chat` folder. 
+Implemented chat example in `chat` folder.
 ```
 git clone
 node ./chat/server.js
-``` 
+```
 ## 28 (domain, async try..catch)
 
 It is in `domain` folder and shows how to use domain. This is a specific module from **Node.js** and catches async errors from callback functions. The file `domain.js` is an example how to use. To run server please perform below commands:
@@ -500,7 +500,7 @@ In this exercise was implemented chat based on **express** framework and add int
  * for ubuntu also you need to install an `express-generator` package
  ```
  npm install -g express-generator
- ``` 
+ ```
 2. Create project making express
  ```
  express -e -s // -s parameter doesn't work on ubuntu
@@ -527,10 +527,10 @@ Create example with `.ejs` engine on express server.
 ## 32 templates: layout, block, partials
 
 Continue development in `/express-chat` folder.
- 
+
  - Add 'ejs-locals' for helping
  - Create layout in 'views' directory
- - Install frontend components using `bower` 
+ - Install frontend components using `bower`
   ```
   npm install -g bower
   cd public/
@@ -538,6 +538,7 @@ Continue development in `/express-chat` folder.
   cd vendor/
   bower i jquery bootstrap
   ```
+
 ## 33 install mongoDB
 
 Tutorial explains how to install mongoDB on Windows and example how to use.
@@ -555,3 +556,15 @@ Method `find` return cursor, which you can use as flow. See more documentation.
 ## 35 Mongoose basics
 
 Create a database for chat (user schema) and make an example in `createDb.js`.
+
+## 36 create test database / async
+
+You have to use `mongoose.connection.on('open', function() { ... })` for create new connection with your database.
+`mongoose.connection.readyState` - current connection state
+Sometimes without it driver doesn't work. Source in file `createDb2.js`.
+Used `async` library and writed user data in database.
+```javascript
+mongoose.set('debug', true) // show all mongo operations
+```
+
+Talking about unique index
