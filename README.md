@@ -568,3 +568,7 @@ mongoose.set('debug', true) // show all mongo operations
 ```
 
 Talking about unique index
+
+## 37 web service. Working with errors.
+
+Was created routes, which show users from database using `mongoose`. Added own `httpError` handler and `middleware`.
