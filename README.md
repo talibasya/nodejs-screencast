@@ -572,3 +572,80 @@ Talking about unique index
 ## 37 web service. Working with errors.
 
 Was created routes, which show users from database using `mongoose`. Added own `httpError` handler and `middleware`.
+
+## 38 session, statistic
+
+Add session to `express`. (doesn't work) deprecated version.
+
+## 39 authorization, Express Mongoose
+
+Create auth method and write user data into database based on `async.waterfall`. Authorization, Registration, check auth etc. (see tutorial)
+
+## 40 commet technology. WS.js
+
+### WS.js - webSocket
+Below an example how to use ws.js on client and server side.
+
+```javascript
+// client side
+var ws = new WebSocket('ws://localhost:8080');
+
+ws.onmessage = function(event) {
+	updateStats(JSON.parse(event.data))
+}
+
+ws.onopen = function() {
+	console.log('connection created')
+}
+
+ws.onclose = function(event) {
+	if (event.wasClean) {
+		console.log('clearly close');
+	} else {
+		console.log('break')
+	}
+	console.log('Code: ' + event.code + " => " + event.reason)
+}
+
+ws.onerror = function(error) {
+	console.error('Error: ' + error.message)
+}
+
+
+// server side
+var WebSocketServer = require('ws').Server;
+var http = require('http');
+var express = require('express');
+
+var app = express();
+
+var server = http.createServer(app);
+server.listen(8080);
+
+var webSocketServer = new WebSocketServer({server: server});
+webSocketServer.on('connection', function(ws) {
+	var timer = setInterval(function() {
+		ws.send(
+			JSON.stringify(process.memoryUsage()),
+			function(err) {
+
+			});
+	}, 100)
+
+	console.log('client was connected');
+
+	ws.on('close', function() {
+		console.log('client disconnected');
+		clearInterval(timer);
+	})
+})
+```
+### sock.js
+Web socket emulator for cross browser.
+
+### socket.io
+sockjs + own wrapper. For simple project. Contains many not resolved issues
+
+## 41 chat on express based on Socket.io
+
+was implemented chat using socket.io on server and client sides.

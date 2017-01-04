@@ -8,7 +8,10 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+var config = require('./config');
 var HttpError = require('./error').HttpError;
+var mongoose = require('./libs/mongoose');
+var session = require('express-session')
 var app = express();
 
 // view engine setup
@@ -24,6 +27,21 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(require('./middleware/sendHttpError'));
+
+// var MongoStore = require('connect-mongo')(session);
+// app.use(session({
+  // secret: config.get('session:secret'),
+  // key: config.get('session:key'),
+  // cookie: config.get('session:cookie'),
+  // store: new MongoStore({
+    // mongoose_connection: mongoose.connection
+  // })
+// })); // connect.sid
+
+app.use(function(req, res, next) {
+  req.session.numberOfVisits = req.session.numberOfVisits + 1 || 1;
+  res.send("Visits: " + req.session.numberOfVisits);
+})
 
 app.use('/', index);
 app.use('/user', users);
